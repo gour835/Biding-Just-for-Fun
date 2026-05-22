@@ -1,0 +1,49 @@
+User
+ ├── owns ───► Products
+ │                ├── has ───► Bids
+ │                │               └── belongs to ───► User
+ 
+
+USERS:
+
+{
+  "_id": ObjectId,
+  "name": "John",
+  "email": "john@example.com",
+  "createdAt": Date
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+PRODUCTS:
+
+{
+  "_id": ObjectId,
+  "title": "iPhone 13",
+  "description": "Used, good condition",
+  "basePrice": 30000,
+  "ownerId": ObjectId,   // reference to users
+  "createdAt": Date
+}
+
+ownerId => users.id;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+BIDS:
+
+{
+  "_id": ObjectId,
+  "productId": ObjectId, // reference to product
+  "userId": ObjectId,    // who placed bid
+  "amount": 35000,
+  "createdAt": Date,
+  "startingAt": Date,
+  "endingAt": Date, 
+}
+
+productId => products.id,
+userId => users.id;
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------

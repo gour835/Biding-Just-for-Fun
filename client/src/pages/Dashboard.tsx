@@ -1,14 +1,37 @@
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 import { useEffect, useState } from "react"
 
+interface Products{
+  _id: number,
+  title: string,
+
+}
+
+interface Auctions{
+  userId: number,
+  productId: {
+    title: string
+  }
+}
+
+interface ProductsAPIResponse{
+  products: Products[]
+}
+
+interface AuctionsAPIResponse{
+  auctions: Auctions[]
+}
+
 function Dashboard() {
-  const [products, setProducts] = useState([]);
-  const [auctions, setAuctions] = useState([]);
+  const [products, setProducts] = useState<Products[]>([]);
+  const [auctions, setAuctions] = useState<Auctions[]>([]);
   useEffect(()=>{
     async function FetchData() {
-      const [ProductsResponse, AuctionsResponse] = await Promise.all([
-        axios.get('http://localhost:8080/api/user/products', {withCredentials: true}),
-        axios.get('http://localhost:8080/api/user/auctions', {withCredentials: true})
+      const [ProductsResponse, AuctionsResponse]:[
+        AxiosResponse<ProductsAPIResponse>, AxiosResponse<AuctionsAPIResponse>
+      ] = await Promise.all([
+        axios.get<ProductsAPIResponse>('http://localhost:8080/api/user/products', {withCredentials: true}),
+        axios.get<AuctionsAPIResponse>('http://localhost:8080/api/user/auctions', {withCredentials: true})
       ]);
       if(ProductsResponse.status === 200){
         setProducts(ProductsResponse.data.products);
@@ -26,7 +49,7 @@ function Dashboard() {
         <ul>
           {auctions.length == 0 ? "no auction found": auctions.map((auction)=>{
             return <li className="auc" key={auction.userId}>
-              {auction.title};
+              {auction.productId.title}
             </li>
           })}
         </ul>

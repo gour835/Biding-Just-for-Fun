@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 interface Auctions{
     _id: number,
-    productID:{title: string},
+    productId:{title: string},
     hasAuction: boolean
 }
 interface AuctionsProps{

@@ -12,7 +12,17 @@ function ProductsDisplay({products}: ProductsProp) {
     const navigate = useNavigate();
   return (
     <>
-        <h1>Products Display</h1>
+        <div className="flex flex-row"> 
+        <h1 className="w-full">Products Display</h1>
+        <button 
+        className="bg-green-300 w-auto h-fit p-2 mx-2 my-auto rounded text-black"
+        onClick={()=>{
+            navigate('/create/product')
+        }}
+        >
+            Create
+        </button>
+        </div>
         <div>
             <table className="w-full border-2 border-amber-100 rounded">
                 <tr className="border-2 border-dotted border-amber-100"> 

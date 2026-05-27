@@ -33,7 +33,7 @@ export async function AddAuction(req, res) {
     });
     await bid.save();
   
-    return res.status(200).json({ success: true, message: "Bid Saved" });
+    return res.status(200).json({ success: true, message: "Auctions Created" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

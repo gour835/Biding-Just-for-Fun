@@ -1,46 +1,25 @@
-import axios, { type AxiosResponse } from "axios";
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
-interface Products{
-  _id: number,
-  title: string,
-
+interface products{
+  _id: string,
+  title: string
 }
-
-interface Auctions{
-  userId: number,
-  productId: {
+interface auctions{
+  userId: string,
+  productId:{
     title: string
   }
 }
-
-interface ProductsAPIResponse{
-  products: Products[]
+interface DashboardProps{
+  products: products[],
+  auctions: auctions[]
+  
 }
 
-interface AuctionsAPIResponse{
-  auctions: Auctions[]
-}
-
-function Dashboard() {
-  const [products, setProducts] = useState<Products[]>([]);
-  const [auctions, setAuctions] = useState<Auctions[]>([]);
+function Dashboard({products, auctions}: DashboardProps) {
+ 
   useEffect(()=>{
-    async function FetchData() {
-      const [ProductsResponse, AuctionsResponse]:[
-        AxiosResponse<ProductsAPIResponse>, AxiosResponse<AuctionsAPIResponse>
-      ] = await Promise.all([
-        axios.get<ProductsAPIResponse>('http://localhost:8080/api/user/products', {withCredentials: true}),
-        axios.get<AuctionsAPIResponse>('http://localhost:8080/api/user/auctions', {withCredentials: true})
-      ]);
-      if(ProductsResponse.status === 200){
-        setProducts(ProductsResponse.data.products);
-      }
-      if(AuctionsResponse.status === 200){
-        setAuctions(AuctionsResponse.data.auctions);
-      }
-    }
-    FetchData()
+    
   }, []);
   return (
     <div>

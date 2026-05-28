@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState, type ChangeEvent } from "react";
-import { data, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 interface products {
   _id: string,
@@ -31,7 +31,7 @@ interface CreateAuctionProps{
   ending: string
 
 }
-function Create({ products, auctions }: CreateProps) {
+function Create({ products }: CreateProps) {
   const navigate = useNavigate();
   const { action, type, id } = useParams();
   const [basePrice, setBasePrice] = useState<string>('');

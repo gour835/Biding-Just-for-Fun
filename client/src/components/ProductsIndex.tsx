@@ -8,7 +8,7 @@ interface Product{
 interface ProductsProp{
     products: Product[]
 }
-function ProductsDisplay({products}: ProductsProp) {
+function ProductsIndex({products}: ProductsProp) {
     const navigate = useNavigate();
   return (
     <>
@@ -45,6 +45,15 @@ function ProductsDisplay({products}: ProductsProp) {
                         {product.title}
                     </td>
                     <td>
+                        <button 
+                        key={product._id}
+                        className={`bg-blue-400 p-1 m-2 rounded shadow-amber-50 shadow-xs text-black hover:shadow hover:scale-105 transition-all`}
+                        onClick={()=>{
+                            navigate(`/product/${product._id}`);
+                        }}
+                        >
+                            Details 
+                        </button>
 
                         {product.hasAuction ? 
                          <button 
@@ -76,4 +85,4 @@ function ProductsDisplay({products}: ProductsProp) {
   )
 }
 
-export default ProductsDisplay
+export default ProductsIndex

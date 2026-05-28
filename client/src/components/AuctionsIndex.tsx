@@ -8,7 +8,7 @@ interface Auctions{
 interface AuctionsProps{
     auctions: Auctions[]
 }
-function AuctionsDisplay({auctions}: AuctionsProps) {
+function AuctionsIndex({auctions}: AuctionsProps) {
     const navigate = useNavigate();
   return (<>
     <h1>Auctions Display</h1>
@@ -51,4 +51,4 @@ function AuctionsDisplay({auctions}: AuctionsProps) {
   )
 }
 
-export default AuctionsDisplay
+export default AuctionsIndex

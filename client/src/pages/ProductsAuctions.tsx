@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
-import ProductsDisplay from "../components/ProductsDisplay.tsx";
-import AuctionsDisplay from "../components/AuctionsDisplay.tsx";
+import ProductsIndex from "../components/ProductsIndex.tsx";
+import AuctionsIndex from "../components/AuctionsIndex.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -26,12 +26,12 @@ function ProductsAuctions() {
 
     if (action === 'products') {
         return (<>
-           <ProductsDisplay products={products}/>
+           <ProductsIndex products={products}/>
         </>)
     }
     return (
         <>
-            <AuctionsDisplay auctions={auctions} />
+            <AuctionsIndex auctions={auctions} />
         </>
     )
 }

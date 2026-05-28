@@ -69,7 +69,7 @@ function ProductsIndex({products}: ProductsProp) {
                         key={product._id}
                         className={`bg-green-400 p-1 m-2 rounded shadow-amber-50 shadow-xs text-black hover:shadow hover:scale-105 transition-all ${!product.hasAuction ? '-': "hidden"}`}
                         onClick={()=>{
-                            navigate(`/create/product/${product._id}`);
+                            navigate(`/create/auction/${product._id}`);
                         }}
                         >
                             Create Auction 

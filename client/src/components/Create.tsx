@@ -24,7 +24,7 @@ interface CreateProductsProp {
   basePrice: string
 }
 
-interface CreateAuctionProps{
+interface CreateAuctionProps {
   productId: string,
   amount: string,
   starting: string,
@@ -63,14 +63,14 @@ function Create({ products }: CreateProps) {
       console.error(error)
     }
   }
-  async function CreateAuction({productId, amount, starting, ending }: CreateAuctionProps) {
-    console.log( productId, amount, starting, ending );
+  async function CreateAuction({ productId, amount, starting, ending }: CreateAuctionProps) {
+    console.log(productId, amount, starting, ending);
     try {
       const credentials = {
-      productId,
-      amount,
-      startingAt: starting,
-      endingAt: ending,
+        productId,
+        amount,
+        startingAt: starting,
+        endingAt: ending,
       }
       const server = await axios.post('http://localhost:8080/api/user/add-auction', credentials, { withCredentials: true });
       if (server.status === 200) {
@@ -83,21 +83,20 @@ function Create({ products }: CreateProps) {
   }
 
   useEffect(() => {
-    async function Products() {
-      try {
-        const server = await axios.get('http://localhost:8080/api/user/products', { withCredentials: true });
-        if (server.status === 200) {
-          console.log('first')
+    async function ProductBasePrice() {
+      if (action === 'create' && type === 'auction' && id) {
+        const prod = products.find(prod => prod._id === id);
+        const BasePrice = prod?.basePrice;
+        if (BasePrice) {
+          setproductId(prod._id);
+          setAmount(BasePrice);
         }
-      } catch (error) {
-        console.error(error);
       }
     }
-    
-    Products();
+    ProductBasePrice()
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function setStartingDate() {
       setStarting(minDate);
     }
@@ -169,13 +168,13 @@ function Create({ products }: CreateProps) {
           <select
             className="border-2 border-amber-200 rounded-lg py-2 px-3 my-2 w-xl"
             name="productId"
-            value={id}
+            value={productId}
             onChange={(e: ChangeEvent<HTMLSelectElement>) => {
               setproductId(e.target.value);
               const SelectedProduct = products.find(p => p._id === e.target.value);
-              if(SelectedProduct){
+              if (SelectedProduct) {
                 setAmount(SelectedProduct.basePrice)
-              }else{
+              } else {
                 setAmount('0');
               }
             }}
@@ -190,7 +189,7 @@ function Create({ products }: CreateProps) {
             })}
           </select>
         </div>
-  
+
         <div>
           <input
             className="border-2 border-amber-200 rounded-lg py-2 px-3 my-2 w-xl"
@@ -215,7 +214,7 @@ function Create({ products }: CreateProps) {
             name="staring"
             min={minDate}
             value={starting}
-            onChange={(e: ChangeEvent<HTMLInputElement>)=>{
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setStarting(e.target.value)
             }}
           />
@@ -228,7 +227,7 @@ function Create({ products }: CreateProps) {
             name="ending"
             min={starting}
             value={ending}
-            onChange={(e: ChangeEvent<HTMLInputElement>)=>{
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setEnding(e.target.value)
             }}
           />

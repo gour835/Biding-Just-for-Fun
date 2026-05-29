@@ -2,7 +2,10 @@ import { useNavigate } from "react-router-dom";
 
 interface Auctions{
     _id: number,
-    productId:{title: string},
+    productId:{
+        _id: string,
+        title: string
+    },
     hasAuction: boolean
 }
 interface AuctionsProps{
@@ -36,10 +39,19 @@ function AuctionsIndex({auctions}: AuctionsProps) {
                         key={auction._id}
                         className={`bg-green-400 p-1 m-2 rounded shadow-amber-50 shadow-xs text-black hover:shadow hover:scale-105 transition-all ${!auction.hasAuction ? '-': "hidden"}`}
                         onClick={()=>{
-                            navigate(`/join/auction/${auction._id}`);
+                            navigate(`/product/${auction.productId._id}`);
                         }}
                         >
-                            Create Auction 
+                            Details
+                        </button>
+                        <button 
+                        key={auction._id}
+                        className={`bg-yellow-400 p-1 m-2 rounded shadow-amber-50 shadow-xs text-black hover:shadow hover:scale-105 transition-all ${!auction.hasAuction ? '-': "hidden"}`}
+                        onClick={()=>{
+                            navigate(`/auction/${auction._id}`);
+                        }}
+                        >
+                            Visit Auction 
                         </button>
                     </td>
                 </tr>)            

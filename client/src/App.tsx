@@ -11,11 +11,18 @@ import Logout from './pages/Logout.tsx'
 import Create from './components/Create.tsx'
 import ProductsAuctions from './pages/ProductsAuctions.tsx'
 import Product from './pages/Product.tsx'
+import Auction from './pages/Auction.tsx'
 
 interface Products {
   _id: string,
   title: string,
-  basePrice: string
+  description: string,
+  basePrice: string,
+  hasAuction: boolean,
+  userId: {
+    _id: string,
+    name: string
+  }
 }
 
 interface Auctions {
@@ -89,6 +96,7 @@ function App() {
                 <Route path='/' element={<Dashboard products={products}  auctions={auctions} />} />
                 <Route path=':action' element={<ProductsAuctions />} />
                 <Route path ='/product/:id'  element={<Product products={products} />}/>
+                <Route path ='/auction/:id'  element={<Auction products={products} />}/>
                 <Route path=':action/:type' element={<Create products={products}  auctions={auctions} />} />
                 <Route path=':action/:type/:id' element={<Create products={products}  auctions={auctions} />} />
               </Route>

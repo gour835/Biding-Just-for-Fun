@@ -14,7 +14,13 @@ import UserModel from './models/UserModel.js';
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:5173', // Your frontend URL
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
 
 const _dirname = dirname(fileURLToPath(import.meta.url));
 

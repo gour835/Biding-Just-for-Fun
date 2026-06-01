@@ -26,8 +26,10 @@ interface Products {
 }
 
 interface Auctions {
+  _id: string,
   userId: string,
   productId: {
+    _id: string,
     title: string
   }
 }
@@ -96,7 +98,7 @@ function App() {
                 <Route path='/' element={<Dashboard products={products}  auctions={auctions} />} />
                 <Route path=':action' element={<ProductsAuctions />} />
                 <Route path ='/product/:id'  element={<Product products={products} />}/>
-                <Route path ='/auction/:id'  element={<Auction products={products} />}/>
+                <Route path ='/auction/:id'  element={<Auction auctions={auctions} />}/>
                 <Route path=':action/:type' element={<Create products={products}  auctions={auctions} />} />
                 <Route path=':action/:type/:id' element={<Create products={products}  auctions={auctions} />} />
               </Route>

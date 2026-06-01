@@ -41,11 +41,10 @@ app.get("/chat", function (req, res) {
 
 io.on("connection",async function (socket) {
   console.log("User Connected");
-  const users = await UserModel.find({});
-  io.emit('users', users);
-  socket.on("chat", function (msg) {
+
+  socket.on("bid", function (msg) {
     console.log(`message: ${msg}`);
-    io.emit("chat", msg);
+    io.emit("bid", msg);
   });
 });
 

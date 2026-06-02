@@ -100,7 +100,7 @@ function Auction({ auctions, user }: AuctionParams) {
                 </i>
             </h1>
             <h2>
-                Starting bid for {startingBid}
+                Starting bid for ₹ {startingBid}
             </h2>
                 {/* bids section */}
                 <section>

@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom"
 interface Product{
     _id: number,
     title: string,
-    hasAuction: boolean
+    hasAuction: boolean,
+    auctionId: string
 }
 interface ProductsProp{
     products: Product[]
@@ -60,7 +61,7 @@ function ProductsIndex({products}: ProductsProp) {
                         key={product._id}
                         className={`bg-yellow-400 p-1 m-2 rounded shadow-amber-50 shadow-xs text-black hover:shadow hover:scale-105 transition-all`}
                         onClick={()=>{
-                            navigate(`/auction/${product._id}`);
+                            navigate(`/auction/${product.auctionId}`);
                         }}
                         >
                             Visit Auction 

@@ -47,10 +47,10 @@ export async function AddBid(req, res) {
         .status(400)
         .json({ success: false, message: "Amount and Auction is required" });
     }
-    const userID = req.user.id;
+    const userId = req.user.id;
   
     //checking if Amount is greater then the basePrice
-    const auction = await AuctionModel.findById({ auctionId });
+    const auction = await AuctionModel.findById( auctionId );
     if (!auction) {
       return res
         .status(404)

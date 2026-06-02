@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
 import { io, type Socket } from "socket.io-client";
@@ -14,6 +15,7 @@ interface ClientToServerEvents {
 interface Auctions {
     _id: string,
     userId: string,
+    amount: number,
     productId: {
         _id: string,
         title: string
@@ -35,6 +37,8 @@ interface BidItem{
 
 function Auction({ auctions, user }: AuctionParams) {
     const [title, setTitle] = useState<string>(' ');
+    const [startingBid, setStartingBid] = useState<number>();
+
     const [bid, setBid] = useState<string>();
     const [bidList, setBidList] = useState<BidItem[]>([]);
     const { id } = useParams();
@@ -58,8 +62,10 @@ function Auction({ auctions, user }: AuctionParams) {
             console.log(id);
             console.log({ auctions });
             const Product = auctions.find((auction) => auction._id === id);
+            const startBid = Product?.amount;
             const ProductTitle = Product?.productId?.title;
             setTitle(ProductTitle ?? 'Not Found');
+            setStartingBid(startBid ?? 0);
         }
         GetProductDetails();
     }, [auctions, id])
@@ -67,6 +73,19 @@ function Auction({ auctions, user }: AuctionParams) {
     async function submit() {
         if (!bid) {
             alert('please add the bid amount');
+            return;
+        }
+        //sending the information into the server
+        const credentials = {
+            amount: bid,
+            auctionId: id
+        }
+        console.log(credentials);
+        const server = await axios.post('http://localhost:8080/api/user/add-bid', credentials, {
+            withCredentials: true
+        })
+        if(server.status !== 200){
+            alert(server.data.message);
             return;
         }
         socket.emit('bid', {'amount': bid, name: user.name});
@@ -79,6 +98,10 @@ function Auction({ auctions, user }: AuctionParams) {
                 <i>
                     `{title}`
                 </i>
+            </h1>
+            <h2>
+                Starting bid for {startingBid}
+            </h2>
                 {/* bids section */}
                 <section>
                     <ul className="list">
@@ -119,7 +142,7 @@ function Auction({ auctions, user }: AuctionParams) {
                         }}
                     >Submit</button>
                 </div>
-            </h1>
+            
         </>
     )
 }

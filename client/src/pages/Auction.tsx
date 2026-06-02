@@ -25,14 +25,18 @@ interface User{
 }
 interface AuctionParams {
     auctions: Auctions[],
-    user: User[]
+    user: User
 }
 
+interface BidItem{
+    name: string,
+    amount: number
+}
 
 function Auction({ auctions, user }: AuctionParams) {
     const [title, setTitle] = useState<string>(' ');
     const [bid, setBid] = useState<string>();
-    const [bidList, setBidList] = useState([]);
+    const [bidList, setBidList] = useState<BidItem[]>([]);
     const { id } = useParams();
 
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("ws://localhost:8080/");

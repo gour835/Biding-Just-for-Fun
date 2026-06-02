@@ -19,12 +19,17 @@ interface Auctions {
         title: string
     }
 }
+interface User{
+    _id: string,
+    name: string
+}
 interface AuctionParams {
-    auctions: Auctions[]
+    auctions: Auctions[],
+    user: User[]
 }
 
 
-function Auction({ auctions }: AuctionParams) {
+function Auction({ auctions, user }: AuctionParams) {
     const [title, setTitle] = useState<string>(' ');
     const [bid, setBid] = useState<string>();
     const [bidList, setBidList] = useState([]);
@@ -37,9 +42,8 @@ function Auction({ auctions }: AuctionParams) {
     });
     socket.on("bid", (msg) => {
         console.log(msg.amount)
-        setBidList((prevBids) => [...prevBids, msg.amount]);
+        setBidList((prevBids) => [...prevBids, msg]);
     });
-    // socket.emit('bid', {"amount" : '9000'});
 
 
     socket.on("disconnect", () => {
@@ -61,7 +65,7 @@ function Auction({ auctions }: AuctionParams) {
             alert('please add the bid amount');
             return;
         }
-        socket.emit('bid', {'amount': bid});
+        socket.emit('bid', {'amount': bid, name: user.name});
         setBid('');
     }
 
@@ -74,10 +78,13 @@ function Auction({ auctions }: AuctionParams) {
                 {/* bids section */}
                 <section>
                     <ul className="list">
-                        {bidList.map((bid)=>{
+                        {bidList.map((bid, index)=>{
                             return (
-                            <li className="m-2 p-2">
-                               {bid}
+                            <li key={index} className="flex flex-row gap-3 m-2 p-2">
+                                <div>
+                                    {bid.name}
+                                </div>
+                               {bid.amount}
                             </li>
                             )
                         })}

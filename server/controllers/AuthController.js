@@ -5,11 +5,18 @@ import Transport from "../config/NodeMailer.js";
 
 export async function token(req, res) {
   try {
-    const user = req.user.id;
-    if (!user) {
+    const id = req.user.id;
+    console.log(id);
+    
+    if (!id) {
       return res.status(400).json({ success: false });
     }
-    return res.status(200).json({ success: true, user });
+    const UserDetails = await UserModel.findOne({_id: id}, "name");
+     if (!UserDetails) {
+      return res.status(401).json({ success: false, message: 'user not found' });
+    }
+
+    return res.status(200).json({ success: true, user: UserDetails });
   } catch (error) {
     return res.status(500).json({
       success: false,

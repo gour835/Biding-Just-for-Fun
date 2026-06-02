@@ -33,6 +33,10 @@ interface Auctions {
     title: string
   }
 }
+interface User {
+  _id: string
+  
+}
 
 interface ProductsAPIResponse {
   products: Products[]
@@ -46,6 +50,7 @@ function App() {
 
   const [products, setProducts] = useState<Products[]>([]);
   const [auctions, setAuctions] = useState<Auctions[]>([]);
+  const [user, setUser] = useState<User[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -56,6 +61,7 @@ function App() {
         });
         console.log(user);
         if (user.status === 200) {
+          setUser(user.data.user);
           setIsAuthenticated(true);
         }
       } catch (error) {
@@ -98,7 +104,7 @@ function App() {
                 <Route path='/' element={<Dashboard products={products}  auctions={auctions} />} />
                 <Route path=':action' element={<ProductsAuctions />} />
                 <Route path ='/product/:id'  element={<Product products={products} />}/>
-                <Route path ='/auction/:id'  element={<Auction auctions={auctions} />}/>
+                <Route path ='/auction/:id'  element={<Auction auctions={auctions} user={user} />}/>
                 <Route path=':action/:type' element={<Create products={products}  auctions={auctions} />} />
                 <Route path=':action/:type/:id' element={<Create products={products}  auctions={auctions} />} />
               </Route>

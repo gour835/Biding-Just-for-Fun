@@ -5,11 +5,13 @@ import { io, type Socket } from "socket.io-client";
 
 interface ServerToClientEvents {
     hello: (val: string) => void,
+    bid_update: (val: object) => void,
     bid: (val: object) => void;
 }
 
 interface ClientToServerEvents {
     bid: (val: object) => void,
+    join_room: (val: object) => void,
     ping: (cb: () => void) => void;
 }
 interface Auctions {
@@ -41,14 +43,15 @@ function Auction({ auctions, user }: AuctionParams) {
 
     const [bid, setBid] = useState<string>();
     const [bidList, setBidList] = useState<BidItem[]>([]);
-    const { id } = useParams();
+    const { id } = useParams<string>();
 
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("ws://localhost:8080/");
 
     socket.on("connect", () => {
         console.log(`connect ${socket.id}`);
+        socket.emit('join_room', id);
     });
-    socket.on("bid", (msg) => {
+    socket.on('bid_update', (msg: object) => {
         console.log(msg.amount)
         setBidList((prevBids) => [...prevBids, msg]);
     });
@@ -88,7 +91,7 @@ function Auction({ auctions, user }: AuctionParams) {
             alert(server.data.message);
             return;
         }
-        socket.emit('bid', {'amount': bid, name: user.name});
+        socket.emit('bid', {'amount': bid, name: user.name, auctionId: id});
         setBid('');
     }
 

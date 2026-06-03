@@ -35,15 +35,18 @@ app.use(cookieParser());
 
 MongoDb();
 
-app.get("/chat", function (req, res) {
-  return res.sendFile(join(_dirname, "socket.html"));
-});
-
 io.on("connection",async function (socket) {
   console.log("User Connected");
 
+  socket.on('join_room', function (id) {  
+    socket.join(id);
+    console.log(`joined room ${id}`);
+  });
+
   socket.on("bid", function (msg) {
-    console.log(`message: ${msg}`);
+    console.log(msg);
+    const auctId = msg.auctionId;
+    io.to(auctId).emit('bid_update', msg);
     io.emit("bid", msg);
   });
 });

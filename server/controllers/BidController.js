@@ -3,21 +3,37 @@ import BidsModel from "../models/BidsModel.js";
 import ProductsModel from "../models/ProductsModel.js";
 import UserModel from "../models/UserModel.js";
 
-
 export async function Auctions(req, res) {
   try {
-    const auctions = await AuctionModel.find({}).populate('productId', 'title');
-    return res.status(200).json({auctions});
+    let auctions = await AuctionModel.find({}).populate("productId", "title");
+    //if auction endingAt is less then the Date.now() then update the auction with the latest bid
+    for (const auction of auctions) {
+      if (auction.endingAt <= Date.now()) {
+        const LatestBid = await BidsModel.findOne({
+          auctionId: auction._Id,
+        }).sort({ createdAt: -1 });
+        if (LatestBid) {
+          await AuctionModel.findByIdAndUpdate(auction._id, {
+            amount: LatestBid.amount,
+          });
+        } else {
+          console.log("Bid not found for ", auction._Id);
+        }
+      }
+    }
+    return res.status(200).json({ auctions });
   } catch (error) {
-    return res.status(500).json({message: "Server Error", error: error.message});
+    return res
+      .status(500)
+      .json({ message: "Server Error", error: error.message });
   }
 }
 export async function AddAuction(req, res) {
   try {
     const { productId, amount, startingAt, endingAt } = req.body;
-  
+
     const userId = req.user.id;
-  
+
     const product = ProductsModel.find({ productId });
     if (!product) {
       return res
@@ -32,7 +48,7 @@ export async function AddAuction(req, res) {
       endingAt,
     });
     await bid.save();
-  
+
     return res.status(200).json({ success: true, message: "Auctions Created" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -48,9 +64,9 @@ export async function AddBid(req, res) {
         .json({ success: false, message: "Amount and Auction is required" });
     }
     const userId = req.user.id;
-  
+
     //checking if Amount is greater then the basePrice
-    const auction = await AuctionModel.findById( auctionId );
+    const auction = await AuctionModel.findById(auctionId);
     if (!auction) {
       return res
         .status(404)
@@ -61,6 +77,18 @@ export async function AddBid(req, res) {
         message: "Auction Ammount is Greater then Your Requested Ammount!",
       });
     } else if (Date.now() > auction.endingAt) {
+      //update the auction to be complete and update the price
+      const LatestBid = await BidsModel.findOne({
+        auctionId: auction._Id,
+      }).sort({ createdAt: -1 });
+      if (LatestBid) {
+        await AuctionModel.findByIdAndUpdate(auction._id, {
+          amount: LatestBid.amount,
+        });
+      } else {
+        console.log("Bid not found for ", auction._Id);
+      }
+
       return res
         .status(400)
         .json({ success: false, message: "Auction is already completed!" });
@@ -69,15 +97,17 @@ export async function AddBid(req, res) {
         .status(400)
         .json({ success: false, message: "Auction has not started yet!" });
     }
-  
+
     const bid = new BidsModel({
       userId,
       auctionId,
-      amount
+      amount,
     });
-  
+
     bid.save();
-    return res.status(200).json({success: true, message: "Bid Saved Successfully"})
+    return res
+      .status(200)
+      .json({ success: true, message: "Bid Saved Successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

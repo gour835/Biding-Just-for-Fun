@@ -15,6 +15,10 @@ const AuctionSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    isComplete: {
+        type: String,
+        default: false
+    },
     startingAt: {
         type: Date,
         default: Date.now,

@@ -12,9 +12,10 @@ export async function Auctions(req, res) {
         const LatestBid = await BidsModel.findOne({
           auctionId: auction._Id,
         }).sort({ createdAt: -1 });
-        if (LatestBid) {
+        if (LatestBid && !auction.isComplete) {
           await AuctionModel.findByIdAndUpdate(auction._id, {
             amount: LatestBid.amount,
+            isComplete: true
           });
         } else {
           console.log("Bid not found for ", auction._Id);
@@ -81,9 +82,10 @@ export async function AddBid(req, res) {
       const LatestBid = await BidsModel.findOne({
         auctionId: auction._Id,
       }).sort({ createdAt: -1 });
-      if (LatestBid) {
+      if (LatestBid && !auction.isComplete) {
         await AuctionModel.findByIdAndUpdate(auction._id, {
           amount: LatestBid.amount,
+          isComplete: true 
         });
       } else {
         console.log("Bid not found for ", auction._Id);
